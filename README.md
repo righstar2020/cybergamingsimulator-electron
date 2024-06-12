@@ -19,6 +19,12 @@ npm run build
 ```
 npm run lint
 ```
+### run electron serve
+```
+npm run electron:serve
+```
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+

@@ -1,0 +1,159 @@
+<template>
+    <div class="LineChartComponent">
+        <div id="lineChart" style="width: 600px; height: 400px;" >
+        </div>
+    </div>
+  </template>
+  
+<script>
+import * as echarts from "echarts";
+export default {
+    name: 'LineChartComponent',
+    props: { 
+      lineChartData:{
+        type: Object, //父组件传参
+        // 使用工厂函数来返回默认对象，确保它是响应式的
+        default: () => ({
+          chartId:'lineChart',
+          title:'端口扫描时间',
+          xAxisData: ['round 1', 'round 2', 'round 3', 'round 4', 'round 5', 'round 6', 'round 7'],
+          yAxisData: [],
+          yAxisLabel:{},
+          legendData: ['10.0.0.1', '10.0.0.2', '10.0.0.3'],
+          seriesData: [{
+            name:'10.0.0.1',
+            data:[0,0,0,0,0,0]
+          }]
+        })
+      }
+    },
+    watch:{
+      'lineChartData'(newVal,oldVal){
+        this.updateLineChart(newVal['chartId'],newVal)
+      }
+    },
+    data() {
+      return {
+        defaultEchartOption:{},
+        lineChart:null,
+        lineChartOption:{
+          title: {
+            text: 'no data'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data: []
+          },
+          grid: {
+                show: true
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: [],
+            axisLine: {
+                //y轴线的配置
+                show: true, //是否展示
+                lineStyle: {
+                  color: 'black', //y轴线的颜色（若只设置了y轴线的颜色，未设置y轴文字的颜色，则y轴文字会默认跟设置的y轴线颜色一致）
+                  width: 1, //y轴线的宽度
+                  type: 'solid' //y轴线为实线
+                }
+            },
+            // 添加x轴标签样式配置
+            axisLabel: {
+              color: 'gray', // 文字颜色
+              fontSize: 12, // 文字大小
+              rotate: 0, // 文字旋转角度
+              interval: 0, // 是否间隔显示标签，0表示全部显示
+            }
+          },
+          yAxis: {
+            type: 'value',
+            axisLine: {
+                //y轴线的配置
+                show: true, //是否展示
+                lineStyle: {
+                  color: 'black', //y轴线的颜色（若只设置了y轴线的颜色，未设置y轴文字的颜色，则y轴文字会默认跟设置的y轴线颜色一致）
+                  width: 1, //y轴线的宽度
+                  type: 'solid' //y轴线为实线
+              }
+            },
+            // 添加y轴标签样式配置
+            axisLabel: {
+                color: 'gray', // 文字颜色
+                fontSize: 12, // 文字大小
+                formatter: '{value} ms', // 自定义格式化显示文本，例如将数值单位设为ms
+            }
+          },
+          series: [  ]
+        }
+      }
+    },
+    mounted() {
+      //mountd阶段才能获取到dom
+      console.log(document.getElementById(this.lineChartData.chartId))
+      console.log(this.lineChartData)
+      this.drawLineChart(this.lineChartData.chartId)
+    },
+    created() {
+      
+    },
+    methods:{
+      drawLineChart(id) {
+        console.log('初始化折线图')
+        console.log(this.lineChartData)
+        console.log(this.lineChartData.chartId)
+        console.log(document.getElementById(this.lineChartData.chartId))
+        this.lineChart = echarts.init(document.getElementById(this.lineChartData.chartId));
+        if(this.lineChartOption!=null){
+          this.lineChart.setOption(this.lineChartOption)
+        }
+      },
+      updateLineChart(id,newlineChartData) {
+        if(this.lineChart == null){
+          this.drawLineChart(this.lineChartData.chartId)
+        }
+        //更新折线图
+        let newLineChartOption = this.lineChartOption
+        //更新title
+        newLineChartOption['title']['text'] = newlineChartData.title
+        //更新legend
+        newLineChartOption['legend']['data'] = newlineChartData.legendData
+        newLineChartOption['series']=[]
+        if(newlineChartData!=null){
+           newLineChartOption.xAxis.data=newlineChartData.xAxisData;
+        }
+        //更新线数据
+        console.log("newLineChartOption.seriesData:")
+        console.log(newLineChartOption.seriesData)
+        for(let i = 0;i<newlineChartData.seriesData.length;i++){
+          let newSeriesDataItem = {
+            name:newlineChartData.seriesData[i].name,
+            data:newlineChartData.seriesData[i].data,
+            type:'line',
+            stack:'Total'
+          }
+          newLineChartOption['series'].push(newSeriesDataItem)
+        }
+         
+        this.lineChart.setOption(newLineChartOption,true)
+      }
+    }
+  }
+  </script>
+
+  <!-- Add "scoped" attribute to limit CSS to this component only -->
+  <style scoped>
+  .LineChartComponent{
+    width: 100%;
+  }
+  </style>
+  
