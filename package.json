@@ -1,19 +1,27 @@
 {
   "name": "cybergamingsimulator",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "start": "vue-cli-service electron:serve",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "patch": "npm version patch && git push origin master && git push origin --tags",
+    "minor": "npm version minor && git push origin master && git push origin --tags",
+    "major": "npm version major && git push origin master && git push origin --tags",
+    "release": "vue-cli-service electron:build --publish always",
+    "lint": "vue-cli-service lint",
+    "prettier": "npx prettier --write ./src ./test",
+    "doc": "docsify serve docs"
   },
+  "extraResources": [
+    "./node_modules/@electron/remote/**"
+  ],
+  "appId": "com.rightstar2020.cybergamingsimulator",
   "main": "background.js",
   "dependencies": {
-    "@electron/remote": "^2.1.2",
     "@element-plus/icons-vue": "^2.3.1",
     "@jiaminghi/data-view": "^2.10.0",
     "axios": "^1.7.2",
@@ -22,6 +30,7 @@
     "crypto-js": "^4.2.0",
     "echarts": "^5.5.0",
     "electron": "^30.0.1",
+    "electron-wpc": "^2.0.1",
     "element-plus": "^2.7.1",
     "less-loader": "^12.2.0",
     "typescript": "^5.4.5",
@@ -35,6 +44,7 @@
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
     "@babel/preset-typescript": "^7.24.1",
+    "@electron/remote": "^2.1.2",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
