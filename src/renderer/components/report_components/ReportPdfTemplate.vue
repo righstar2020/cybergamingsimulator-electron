@@ -24,7 +24,7 @@
             <div class="report-item-chart-body" style="width: 100%;height: 300px;">
                <!-- <EchartToBase64 :chartId = "'mychart'+index+'_'+c_index" :option="chart.echart_option"></EchartToBase64>
                <img :src="chart.chart_base64_content"> -->
-               <!-- <networkDynamicFlyMap v-if="chart.echart_name=='networkDynamicFlyMap'"></networkDynamicFlyMap> -->
+               <networkTopo v-if="chart.echart_name=='networkDynamicFlyMap'"></networkTopo>
                <trafficFlowChart v-if="chart.echart_name=='trafficFlowChart'" :animation ="false" :darkTheme="false"></trafficFlowChart>
                <trafficEntropyChart v-if="chart.echart_name=='trafficEntropyChart'" :animation ="false" :darkTheme="false"></trafficEntropyChart>
             </div>
@@ -42,13 +42,15 @@ import EchartToBase64 from './EchartToBase64.vue'
 import networkDynamicFlyMap from '../large_screen_components/NetworkDynamicFlyMap.vue'
 import trafficFlowChart from '../large_screen_components/TrafficFlowChart.vue'
 import trafficEntropyChart from '../large_screen_components/TrafficEntropyChart.vue'
+import networkTopo from '../network_components/NetworkTopo.vue'
 export default {
   name: 'ReportPdfTemplate',
   components: {
     EchartToBase64,
     networkDynamicFlyMap,
     trafficFlowChart,
-    trafficEntropyChart
+    trafficEntropyChart,
+    networkTopo
   },
   data() {
     return {

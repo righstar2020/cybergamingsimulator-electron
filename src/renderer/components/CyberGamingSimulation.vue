@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     consoleOutput(msg) {
+      if(msg=='')return
       let msgOut = {
         timestamp: new Date().toLocaleString(),
         msg: msg

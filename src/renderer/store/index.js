@@ -246,7 +246,7 @@ let store = createStore({
                 title:'协议封禁',
                 name:'host_protocol_forbid',
                 operationType:'action',
-                clientType:'swicth',
+                clientType:'switch',
                 description:'在特定主机或交换机上进行特定协议封禁.\n 参数:dpid->交换机dpid,protocol->协议类型(icmp/udp) \n返回结果:主机状态',
                 params:[{
                     title:'交换机dpid',
@@ -266,7 +266,7 @@ let store = createStore({
                 title:'白名单',
                 name:'ip_white_table',
                 operationType:'action',
-                clientType:'swicth',
+                clientType:'switch',
                 description:'在特定交换机上使用白名单进行流量过滤.\n 参数:dpid->交换机dpid \n返回结果:主机状态',
                 params:[{
                     title:'交换机DPID',
@@ -278,7 +278,7 @@ let store = createStore({
                 title:'流量过滤',
                 name:'host_traffic_filter',
                 operationType:'action',
-                clientType:'swicth',
+                clientType:'switch',
                 description:'在特定交换机上部署流量过滤器.\n 参数:dpid->交换机dpid \n返回结果:主机状态',
                 params:[{
                     title:'节点IP',
@@ -507,7 +507,8 @@ let store = createStore({
   mutations: {
     showInfoMessage(state,payload){
         state.global.message = {
-            'message':payload['message']
+            'message':payload['message'],
+            'type':payload['type']
         }
     },
     updateAllStateData(state,payload){

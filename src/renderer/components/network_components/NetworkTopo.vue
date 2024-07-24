@@ -29,7 +29,7 @@
             <!--自定义右键按钮-->
             <div v-if="isShowTopoMenu" class="menu_box" :style="{'left': topoMenuLeft + 'px', 'top': topoMenuTop + 'px'}">
                 <div class="menu">
-                    <div class="menu_item item_text" @click.stop="menuItemClick(0)">复制IP</div>
+                    <div class="menu_item item_text" @click.stop="menuItemClick(0)">复制输入</div>
                     <div class="menu_item item_text" @click.stop="menuItemClick(1)">复制名称</div>
                 </div>
             </div>
@@ -118,6 +118,12 @@ export default {
          }
      },
      watch: {
+        '$store.state.gamingStatus.currentPlayer'(newVal,oldVal){
+            if(newVal!=null){
+                // console.log("update currentPlayer:",newVal)
+                // this.currentPlayer = newVal
+            }               
+        },
         '$store.state.environmentMonitor.networkDynamicMapData'(newVal,oldVal){
             let data = deepCopy(newVal)
             console.log("update networkDynamicMapData:",data)
@@ -128,8 +134,7 @@ export default {
             if(newVal!=null){
                 console.log("update networkConfigData:",newVal)
                 this.networkConfigData = newVal
-            }
-                      
+            }               
         }
      },
      created() {
@@ -197,7 +202,6 @@ export default {
                             if(topoData['nodes'][j]['id']==this.oldNetworkTopoData['nodes'][i]['id']){
                                 if(getObjectHash(topoData['nodes'][j])!=getObjectHash(this.oldNetworkTopoData['nodes'][i])){
                                     console.log("update node:"+topoData['nodes'][j]['id'])
-                                    var newColor = "#" + Math.floor(Math.random() * 255 * 255 * 255).toString(16);
                                     this.networkTopoData.nodes.update([{ id: topoData['nodes'][j]['id'], image:topoData['nodes'][j]['image'] }]);
                                 }
                                 
@@ -317,10 +321,18 @@ export default {
             this.network = network
 
             //订阅network相关的事件
-
             this.network.on("oncontext", (e) => {
                 this.topoMenuHandle(e)
             });
+        },
+        openlargeScreenMonitor(){
+            const data = {
+                title: '大屏监控',
+                url: 'largeScreenMonitor',
+                full_screen:true
+            };
+            //创建新无边框窗口
+            this.$electron.ipcRenderer.send('open-frameless-window-by-local-url', data);
         },
         topoMenuHandle(e){
             this.isShowTopoMenu=true
@@ -336,18 +348,9 @@ export default {
             if(nodeId!=undefined){
                 this.currentSelectedNode = this.networkTopoData.nodes.get(nodeId)
                 console.log("currentSelectedNode:")
-                console.log(this.networkTopoData.nodes)
             }            
         },
-        openlargeScreenMonitor(){
-            const data = {
-                title: '大屏监控',
-                url: 'largeScreenMonitor',
-                full_screen:true
-            };
-            //创建新无边框窗口
-            this.$electron.ipcRenderer.send('open-frameless-window-by-local-url', data);
-        },
+        
         topoMenuStopHandle(e){
             this.isShowTopoMenu=false
             this.currentSelectedNode=null
@@ -356,18 +359,30 @@ export default {
             this.isShowTopoMenu=false
             if(index==0){
                 //复制目标IP到剪切板
-                if(this.currentSelectedNode!=null){
-                    let IP = this.currentSelectedNode.ip
-                    console.log(IP)
-                    clipboard.copy(IP);
-                    this.$message({
-                        message: '复制成功',
-                        type:'success'
-                    })
-                    //复制给全局form输入
-                    this.$store.commit('updateCurrentCopyFormData',{
-                        client_ip:IP
-                    })
+                if(this.currentSelectedNode!=null&&this.currentSelectedNode!=undefined){
+                    let node_type = this.currentSelectedNode['node_type']
+                    console.log("currentSelectedNode:",this.currentSelectedNode)
+                    if(node_type!=undefined){
+                        let dpid = this.currentSelectedNode['dpid']
+                        let ip = this.currentSelectedNode['ip']
+                        let copy_content = ''
+                        let copy_commit = {} 
+                        if(node_type=='switch'&&dpid!=undefined){
+                            copy_content = dpid
+                            copy_commit = {dpid:dpid}
+                            this.$message({message: 'DPID复制成功', type:'success'})
+                        }
+                        if(node_type=='host'&&ip!=undefined){
+                            copy_content = ip
+                            copy_commit = {client_ip:ip}
+                            this.$message({message: 'IP复制成功', type:'success'})
+                        }
+                        clipboard.copy(copy_content);
+                        //复制给全局form输入
+                        this.$store.commit('updateCurrentCopyFormData',copy_commit)
+                        
+                    }
+                    
                 }
                 
             }

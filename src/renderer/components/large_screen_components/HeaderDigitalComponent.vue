@@ -54,7 +54,8 @@ export default {
     '$store.state.environmentMonitor.headerDigitalData'(newVal,oldVal){
       // console.log("headerDigitalData:",newVal)
       if(newVal!=undefined)
-        this.updataData(this.genMockHeaderDigitalData())
+        // this.updataData(this.genMockHeaderDigitalData())
+        this.loopMockHeaderDigitalData()
     },
     '$store.state.environmentMonitor.taskHistoryData'(newVal,oldVal){
       console.log("taskHistoryData:",newVal)
@@ -67,7 +68,7 @@ export default {
           this.mockAttackDefendTime = this.mockAttackTime+10 //攻击结束延迟10s释放防御
         }
       }
-        
+      this.loopMockHeaderDigitalData()
     }
   },
   created(){
@@ -106,7 +107,7 @@ export default {
       this.updataData(this.genMockHeaderDigitalData())
     },
     genMockHeaderDigitalData(){
-      let headerDigitalData = this.$store.getters.getHeaderDigitalData
+      let headerDigitalData = deepCopy(this.$store.getters.getHeaderDigitalData)
       let mockDigitalData = this.mockDigitalData
       Object.keys(mockDigitalData).forEach((key)=>{
         headerDigitalData[key]['number'] = mockDigitalData[key]['number']

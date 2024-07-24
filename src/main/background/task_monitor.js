@@ -261,7 +261,7 @@ function proccess_defender_defend_task_result(task,task_result,envStatusResultDa
   //更新任务结果
   if(task_result!=undefined){
     let deception_result = task
-    envStatusResultDataItem['client_ip']=(task['client_ip']==''?task['swicth_dpid']:task['client_ip'])
+    envStatusResultDataItem['client_ip']=(task['client_ip']==''?task['switch_dpid']:task['client_ip'])
   }
   return envStatusResultDataItem
 }

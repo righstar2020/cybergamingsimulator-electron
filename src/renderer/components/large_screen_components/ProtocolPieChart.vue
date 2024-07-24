@@ -19,7 +19,7 @@ export default {
             type: 'pie',
             radius: '50%',
             trafficSort: false,
-            data:[],
+            data:[{name:'ICMP',value:1},{name:'TCP',value:1},{name:'UDP',value:1},{name:'other',value:1}],
             insideLabel: {
               show: false
             },
@@ -64,10 +64,7 @@ export default {
         this.pieChart = echarts.init(document.getElementById('pieChart'),'dark');
     },
     updataChartData (chartData) {
-      let sumChartDataNum = 0
-      Object.values(chartData).forEach((num)=>{
-        sumChartDataNum += num
-      })
+      if(chartData==undefined||Object.keys(chartData).length==0)return
       let option = {
         series: [
           {
@@ -75,8 +72,8 @@ export default {
             radius: '50%',
             trafficSort: false,
             data: new Array(Object.keys(chartData).length).fill(0).map((foo, i) => ({
-              name:deepCopy(Object.keys(chartData)[i]),
-              value:deepCopy(Object.values(chartData)[i])
+              name:Object.keys(chartData)[i],
+              value:Object.values(chartData)[i]
             })),
             insideLabel: {
               show: false

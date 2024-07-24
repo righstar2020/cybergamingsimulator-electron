@@ -92,7 +92,7 @@ let game_loop_interval = null
 function start_task_loop(){
   if(game_loop_interval == null){
       console.log('start_game_loop!')
-      game_loop_interval = setInterval(game_loop, 30000); // 每30秒执行一次
+      game_loop_interval = setInterval(game_loop, 10000); // 每10秒执行一次
   }
 }
 start_task_loop()

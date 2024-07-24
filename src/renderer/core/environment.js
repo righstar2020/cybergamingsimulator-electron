@@ -143,28 +143,38 @@ function proccessNetworkDynamicMapData(networkDynamicMapData){
             nodes[i]['image'] = serverImage
             if(nodes[i]['defend_source']!=undefined&&nodes[i]['defend_source']!=''){
                 nodes[i]['image'] = serverDefendImage
-                console.log("new node image",nodes[i])
+                nodes[i]['map_active'] = true
+                console.log("new defender image",nodes[i])
             }
             if(nodes[i]['attack_source']!=undefined&&nodes[i]['attack_source']!=''){
                 nodes[i]['image'] = serverAttackerImage
-                console.log("new node image",nodes[i])
+                nodes[i]['map_active'] = true
+                nodes[i]['flyline_end_node'] = nodes[i]['attack_source']
+                console.log("new attacker image",nodes[i])
             }
             if(nodes[i]['victim_source']!=undefined&&nodes[i]['victim_source']!=''){
                 nodes[i]['image'] = serverAttackedImage
-                console.log("new node image",nodes[i])
+                nodes[i]['map_active'] = true
+                console.log("new victim image",nodes[i])
             }
         }
-        if(nodes[i]['node_type']=='swicth'){
+        if(nodes[i]['node_type']=='switch'){
             nodes[i]['image'] = switchImage
             if(nodes[i]['defend_source']!=undefined&&nodes[i]['defend_source']!=''){
                 nodes[i]['image'] = switchDefendImage
+                nodes[i]['map_active'] = true
                 console.log("new node image",nodes[i])
             }
         }
             
     }
+    let nodes_dict = {}
+    nodes.forEach(node => {
+        nodes_dict[node['id']] = node
+    });
     newNetworkDynamicMapData['nodes'] = nodes
     newNetworkDynamicMapData['links'] = links
+    newNetworkDynamicMapData['nodes_dict'] = nodes_dict
     newNetworkDynamicMapData['timestamp'] = Date.now()
     return newNetworkDynamicMapData
 }

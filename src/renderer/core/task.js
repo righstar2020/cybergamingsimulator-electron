@@ -74,13 +74,13 @@ function proccess_operation_link_to_task(player,operation_task_list){
         let client_type = operation_task_list[i]['clientType']
         let client_ip = params['client_ip']==undefined?'':params['client_ip']
         let target_ip = params['target_ip']==undefined?'':params['target_ip']
-        let swicth_dpid = params['dpid']==undefined?'':params['dpid']
+        let switch_dpid = params['dpid']==undefined?'':params['dpid']
         let task = {
             'player':player,
             'client_type':client_type,
             'client_ip':client_ip,
             'target_ip':target_ip,
-            'swicth_dpid':swicth_dpid,
+            'switch_dpid':switch_dpid,
             'title':task_title,
             'task_type':operation_task_list[i].operationType,
             'task_name':operation_task_list[i].name,
